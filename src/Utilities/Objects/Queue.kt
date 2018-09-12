@@ -38,16 +38,16 @@ class Queue <T : Any>: Iterator<T>
 	
 	fun dequeue(): T
 	{
-		return source.last().useAndReturn {
+		return source.first().useAndReturn {
 			source.remove(it)
+			source.trimToSize()
 			return@useAndReturn it
 		}
 	}
 	
 	fun dequeue(using: (T) -> Unit)
 	{
-		using(source.last())
-		source.remove(source.last())
+		using(dequeue())
 	}
 	
 	override fun next(): T
